@@ -31,8 +31,114 @@ We use this categorical data encoding technique when the features are nominal(do
 • Yeojohnson method
 
 # CODING AND OUTPUT:
-       # INCLUDE YOUR CODING AND OUTPUT SCREENSHOTS HERE
-# RESULT:
-       # INCLUDE YOUR RESULT HERE
 
+~~~
+import pandas as pd
+df=pd.read_csv("/content/Encoding Data.csv")
+df
+from sklearn.preprocessing import LabelEncoder,OrdinalEncoder
+pm=['Hot','Warm','Cold']
+e1=OrdinalEncoder(categories=[pm])
+e1.fit_transform(df[["ord_2"]])
+df['ord_2']=e1.fit_transform(df[["ord_2"]])
+df
+le=LabelEncoder()
+dfc=df.copy()
+dfc['ord_2']=le.fit_transform(dfc['ord_2'])
+dfc
+from sklearn.preprocessing import OneHotEncoder
+ohe=OneHotEncoder(sparse_output=False)
+df2=df.copy()
+enc=pd.DataFrame(ohe.fit_transform(df2[['nom_0']]))
+df2=pd.concat([df2,enc],axis=1)
+df2
+pd.get_dummies(df2,columns=['nom_0'], dtype=int)
+pip install --upgrade category_encoders
+from category_encoders import BinaryEncoder
+df=pd.read_csv("/content/data.csv")
+df
+be=BinaryEncoder()
+nd=be.fit_transform(df['Ord_2'])
+dfb=pd.concat([df,nd],axis=1)
+dfb1=df.copy()
+dfb
+# TARGET ENCODER
+from category_encoders import TargetEncoder
+te=TargetEncoder()
+cc=df.copy()
+new=te.fit_transform(X=cc["City"],y=cc["Target"])
+cc=pd.concat([cc,new],axis=1)
+cc
+# FEATURE TRANSFORMATION
+import pandas as pd
+from scipy import stats
+import numpy as np
+df=pd.read_csv("/content/Data_to_Transform.csv")
+df
+df.skew()
+np.log(df["Highly Positive Skew"])
+np.reciprocal(df["Moderate Positive Skew"])
+np.sqrt(df["Highly Positive Skew"])
+np.square(df["Highly Positive Skew"])
+df["Highly Positive Skew_boxcox"],parameters=stats.boxcox(df["Highly Positive Skew"])
+df
+df["Moderate Negative Skew_yeojohnson"],parameters=stats.yeojohnson(df["Moderate Negative Skew"])
+df.skew()
+df["Highly Negative Skew_yeojohnson"],parameters=stats.yeojohnson(df["Highly Negative Skew"])
+df.skew()
+from sklearn.preprocessing import QuantileTransformer
+qt=QuantileTransformer(output_distribution='normal')
+df["Moderate Negative Skew"]=qt.fit_transform(df[["Moderate Negative Skew"]])
+df
+import seaborn as sns
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+sm.qqplot(df["Moderate Negative Skew"],line='45')
+plt.show()
+df_original = pd.read_csv('/content/Data_to_Transform.csv')
+sm.qqplot(df_original["Moderate Negative Skew"], line='45')
+plt.show()
+sm.qqplot(np.reciprocal(df_original["Moderate Negative Skew"]), line='45')
+plt.show()
+from sklearn.preprocessing import QuantileTransformer
+QT=QuantileTransformer(output_distribution='normal',n_quantiles=891)
+df["Moderate Negative Skew"]=qt.fit_transform(df[["Moderate Negative Skew"]])
+sm.qqplot(df["Moderate Negative Skew"],line='45')
+plt.show()
+df["Highly Negative Skew_1"]=qt.fit_transform(df[["Highly Negative Skew"]])
+sm.qqplot(df["Highly Negative Skew"],line='45')
+plt.show()
+sm.qqplot(df["Highly Negative Skew_1"],line='45')
+plt.show()
+dt=pd.read_csv("/content/titanic_dataset.csv")
+
+~~~
+
+<img width="662" height="724" alt="Screenshot 2026-08-06 083555" src="https://github.com/user-attachments/assets/f4ac3c4b-c84b-46dc-b5b7-6d48c9aa7887" />
+<img width="427" height="768" alt="Screenshot 2026-08-06 083609" src="https://github.com/user-attachments/assets/c9041d56-6e15-4bfa-b01f-0847755e9983" />
+<img width="476" height="722" alt="Screenshot 2026-08-06 083621" src="https://github.com/user-attachments/assets/9c0cfd1a-ccdb-4b69-acfb-40b9b3d66092" />
+<img width="631" height="782" alt="Screenshot 2026-08-06 083631" src="https://github.com/user-attachments/assets/8a1d6724-dcbb-4bc4-aa4d-9a6afed3a18a" />
+<img width="1151" height="780" alt="Screenshot 2026-08-06 083644" src="https://github.com/user-attachments/assets/2c57fa06-1408-4995-abc4-b2cc3291ed7d" />
+<img width="697" height="754" alt="Screenshot 2026-08-06 083655" src="https://github.com/user-attachments/assets/5d667f38-3f24-450f-93da-5a87d721118f" />
+<img width="714" height="769" alt="Screenshot 2026-08-06 083705" src="https://github.com/user-attachments/assets/90dfc4a9-3def-4dd5-8ef5-c51183705c81" />
+<img width="885" height="780" alt="Screenshot 2026-08-06 083715" src="https://github.com/user-attachments/assets/76ac2789-5dce-4d92-b5c3-022140a4e245" />
+<img width="549" height="770" alt="Screenshot 2026-08-06 083725" src="https://github.com/user-attachments/assets/0a04d462-8062-4d96-b2e7-85aa25155f14" />
+<img width="547" height="761" alt="Screenshot 2026-08-06 083736" src="https://github.com/user-attachments/assets/7ddc4ee4-b3de-4414-8ffb-ca620a5533d1" />
+<img width="1162" height="784" alt="Screenshot 2026-08-06 083751" src="https://github.com/user-attachments/assets/21965c7a-f683-4094-8b69-5e4c7c242162" />
+<img width="1137" height="797" alt="Screenshot 2026-08-06 083800" src="https://github.com/user-attachments/assets/05e5e390-b612-4ad9-91b9-e019d76ebe28" />
+<img width="1490" height="781" alt="Screenshot 2026-08-06 083812" src="https://github.com/user-attachments/assets/9ba2bf1f-8cdb-449a-acf1-d883cb60db3c" />
+<img width="1486" height="723" alt="Screenshot 2026-08-06 083829" src="https://github.com/user-attachments/assets/465cf38c-2a4e-4f79-b24d-6125a54b70b4" />
+<img width="621" height="492" alt="Screenshot 2026-08-06 083840" src="https://github.com/user-attachments/assets/13603e75-3eee-4891-ba0b-6cf993e41dd1" />
+<img width="734" height="603" alt="Screenshot 2026-08-06 083847" src="https://github.com/user-attachments/assets/92cc437a-71d2-4c92-9180-f1f55f2c8561" />
+<img width="649" height="609" alt="Screenshot 2026-08-06 083859" src="https://github.com/user-attachments/assets/76ec47eb-a204-4366-9eda-3c3589d5492a" />
+<img width="742" height="495" alt="Screenshot 2026-08-06 083909" src="https://github.com/user-attachments/assets/ca96af63-249c-4fdb-8eac-1b7f6558f9d5" />
+<img width="658" height="675" alt="Screenshot 2026-08-06 083920" src="https://github.com/user-attachments/assets/5dfcc2d4-0769-41e3-ae7b-2197bd283bce" />
+<img width="713" height="486" alt="Screenshot 2026-08-06 084017" src="https://github.com/user-attachments/assets/4fb21093-f511-416c-96bc-c9f701f67f52" />
+<img width="1218" height="746" alt="Screenshot 2026-08-06 084030" src="https://github.com/user-attachments/assets/a2480606-345b-48ac-ab0a-161097a4f7ba" />
+       
+# RESULT:
+     
+~~~
+Successfully read the given data, performed feature encoding and transformation, and saved the transformed data to a file.
+~~~
        
