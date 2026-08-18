@@ -1,4 +1,6 @@
 ## EXNO-3-DS
+## Name : Ritesh DP
+## Reg.No. : 212225040339
 
 # AIM:
 To read the given data and perform Feature Encoding and Transformation process and save the data to a file.
@@ -33,85 +35,260 @@ We use this categorical data encoding technique when the features are nominal(do
 # CODING AND OUTPUT:
 
 ~~~
+
+# ============================================================
+# EX NO 3 - KVP
+# ENCODING AND FEATURE TRANSFORMATION
+# ============================================================
+
+# -----------------------------
+# ENCODING
+# -----------------------------
+
 import pandas as pd
-df=pd.read_csv("/content/Encoding Data.csv")
+
+# Read Encoding Data
+df = pd.read_csv("/content/Encoding Data.csv")
 df
-from sklearn.preprocessing import LabelEncoder,OrdinalEncoder
-pm=['Hot','Warm','Cold']
-e1=OrdinalEncoder(categories=[pm])
+
+
+# -----------------------------
+# ORDINAL ENCODING
+# -----------------------------
+
+from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
+
+pm = ['Hot', 'Warm', 'Cold']
+
+e1 = OrdinalEncoder(categories=[pm])
+
 e1.fit_transform(df[["ord_2"]])
-df['ord_2']=e1.fit_transform(df[["ord_2"]])
+
+
+df['bo2'] = e1.fit_transform(df[["ord_2"]])
 df
-le=LabelEncoder()
-dfc=df.copy()
-dfc['ord_2']=le.fit_transform(dfc['ord_2'])
+
+
+# -----------------------------
+# LABEL ENCODING
+# -----------------------------
+
+le = LabelEncoder()
+
+dfc = df.copy()
+
+dfc['ord_2'] = le.fit_transform(dfc['ord_2'])
+
 dfc
+
+
+# -----------------------------
+# ONE HOT ENCODING
+# -----------------------------
+
 from sklearn.preprocessing import OneHotEncoder
-ohe=OneHotEncoder(sparse_output=False)
-df2=df.copy()
-enc=pd.DataFrame(ohe.fit_transform(df2[['nom_0']]))
-df2=pd.concat([df2,enc],axis=1)
+
+ohe = OneHotEncoder(sparse_output=False)
+
+df2 = df.copy()
+
+enc = pd.DataFrame(
+    ohe.fit_transform(df2[["nom_0"]])
+)
+
+df2 = pd.concat([df2, enc], axis=1)
+
 df2
-pd.get_dummies(df2,columns=['nom_0'], dtype=int)
-pip install --upgrade category_encoders
+
+
+# Using get_dummies
+pd.get_dummies(df2, columns=["nom_0"])
+
+
+# -----------------------------
+# INSTALL CATEGORY ENCODERS
+# -----------------------------
+
+!pip install --upgrade category_encoders
+
+
+# -----------------------------
+# BINARY ENCODER
+# -----------------------------
+
 from category_encoders import BinaryEncoder
-df=pd.read_csv("/content/data.csv")
+
+df = pd.read_csv("/content/data.csv")
 df
-be=BinaryEncoder()
-nd=be.fit_transform(df['Ord_2'])
-dfb=pd.concat([df,nd],axis=1)
-dfb1=df.copy()
+
+
+be = BinaryEncoder()
+
+nd = be.fit_transform(df['Ord_2'])
+
+dfb = pd.concat([df, nd], axis=1)
+
 dfb
-# TARGET ENCODER
+
+
+# -----------------------------
+# MEAN ENCODING
+# -----------------------------
+
 from category_encoders import TargetEncoder
-te=TargetEncoder()
-cc=df.copy()
-new=te.fit_transform(X=cc["City"],y=cc["Target"])
-cc=pd.concat([cc,new],axis=1)
-cc
+
+te = TargetEncoder()
+
+CC = df.copy()
+
+new = te.fit_transform(
+    X=CC["City"],
+    y=CC["Target"]
+)
+
+CC = pd.concat([CC, new], axis=1)
+
+CC
+
+
+# ============================================================
 # FEATURE TRANSFORMATION
+# ============================================================
+
 import pandas as pd
 from scipy import stats
 import numpy as np
-df=pd.read_csv("/content/Data_to_Transform.csv")
+
+df = pd.read_csv("/content/Data_to_Transform.csv")
 df
+
+
+# Check skewness
 df.skew()
+
+
+# -----------------------------
+# 1. LOG TRANSFORMATION
+# -----------------------------
+
 np.log(df["Highly Positive Skew"])
+
+
+# -----------------------------
+# 2. RECIPROCAL TRANSFORMATION
+# -----------------------------
+
 np.reciprocal(df["Moderate Positive Skew"])
+
+
+# -----------------------------
+# 4. SQUARE ROOT TRANSFORMATION
+# -----------------------------
+
 np.sqrt(df["Highly Positive Skew"])
+
+
+# -----------------------------
+# 5. SQUARE TRANSFORMATION
+# -----------------------------
+
 np.square(df["Highly Positive Skew"])
-df["Highly Positive Skew_boxcox"],parameters=stats.boxcox(df["Highly Positive Skew"])
+
+
+# -----------------------------
+# POWER TRANSFORMATIONS
+# -----------------------------
+
+# BOX COX
+
+df["Highly Positive Skew_boxcox"], parameters = stats.boxcox(
+    df["Highly Positive Skew"]
+)
+
 df
-df["Moderate Negative Skew_yeojohnson"],parameters=stats.yeojohnson(df["Moderate Negative Skew"])
+
+
+# Check skewness after Box-Cox
 df.skew()
-df["Highly Negative Skew_yeojohnson"],parameters=stats.yeojohnson(df["Highly Negative Skew"])
+
+
+# -----------------------------
+# YEO-JOHNSON
+# -----------------------------
+
+df["Highly Negative Skew_yeojohnson"], parameters = stats.yeojohnson(
+    df["Highly Negative Skew"]
+)
+
 df.skew()
+
+
+# -----------------------------
+# QUANTILE TRANSFORMATION
+# -----------------------------
+
 from sklearn.preprocessing import QuantileTransformer
-qt=QuantileTransformer(output_distribution='normal')
-df["Moderate Negative Skew"]=qt.fit_transform(df[["Moderate Negative Skew"]])
+
+qt = QuantileTransformer(output_distribution='normal')
+
+df["Moderate Negative Skew_1"] = qt.fit_transform(
+    df[["Moderate Negative Skew"]]
+)
+
 df
+
+
+# ============================================================
+# QQ PLOT
+# ============================================================
+
 import seaborn as sns
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
-sm.qqplot(df["Moderate Negative Skew"],line='45')
-plt.show()
-df_original = pd.read_csv('/content/Data_to_Transform.csv')
-sm.qqplot(df_original["Moderate Negative Skew"], line='45')
-plt.show()
-sm.qqplot(np.reciprocal(df_original["Moderate Negative Skew"]), line='45')
-plt.show()
-from sklearn.preprocessing import QuantileTransformer
-QT=QuantileTransformer(output_distribution='normal',n_quantiles=891)
-df["Moderate Negative Skew"]=qt.fit_transform(df[["Moderate Negative Skew"]])
-sm.qqplot(df["Moderate Negative Skew"],line='45')
-plt.show()
-df["Highly Negative Skew_1"]=qt.fit_transform(df[["Highly Negative Skew"]])
-sm.qqplot(df["Highly Negative Skew"],line='45')
-plt.show()
-sm.qqplot(df["Highly Negative Skew_1"],line='45')
-plt.show()
-dt=pd.read_csv("/content/titanic_dataset.csv")
 
+
+# QQ plot - original data
+sm.qqplot(
+    df["Moderate Negative Skew"],
+    line='45'
+)
+
+plt.show()
+
+
+# QQ plot - reciprocal transformation
+sm.qqplot(
+    np.reciprocal(df["Moderate Negative Skew"]),
+    line='45'
+)
+
+plt.show()
+
+
+# -----------------------------
+# QUANTILE TRANSFORMATION
+# FOR QQ PLOT
+# -----------------------------
+
+from sklearn.preprocessing import QuantileTransformer
+
+qt = QuantileTransformer(
+    output_distribution='normal',
+    n_quantiles=891
+)
+
+df["Moderate Negative Skew"] = qt.fit_transform(
+    df[["Moderate Negative Skew"]]
+)
+
+
+# Final QQ plot
+sm.qqplot(
+    df["Moderate Negative Skew"],
+    line='45'
+)
+
+plt.show()
 ~~~
 
 <img width="662" height="724" alt="Screenshot 2026-08-06 083555" src="https://github.com/user-attachments/assets/f4ac3c4b-c84b-46dc-b5b7-6d48c9aa7887" />
